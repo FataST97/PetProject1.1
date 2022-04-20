@@ -1,16 +1,18 @@
 package com.griddynamics.qa.course.petTest;
 
-import com.griddynamics.qa.course.IAO.Input;
-import com.griddynamics.qa.course.IAO.Output;
-import com.griddynamics.qa.course.module.AQAStudent;
-import com.griddynamics.qa.course.module.JavaStudent;
-import com.griddynamics.qa.course.module.Student;
+import com.griddynamics.qa.course.io.InputAndOutput;
+import com.griddynamics.qa.course.model.AQAStudent;
+import com.griddynamics.qa.course.model.JavaStudent;
+import com.griddynamics.qa.course.model.Student;
+import com.griddynamics.qa.course.service.TimeCalculation;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class PetTest {
+    LocalDateTime testDate = LocalDateTime.of(2020,6,8,15,0);
     Student studentJava = new JavaStudent("Ivanov Ivan", LocalDateTime.of(2020, 6, 1, 10, 0));
     Student studentAQA = new AQAStudent("Sidorov Ivan", LocalDateTime.of(2020, 5, 30, 10, 0));
 
@@ -23,28 +25,23 @@ public class PetTest {
     }
 
     @Test
-    public void testHowMuchTimeIsLeft() {
-        int[] expectedJava = new int[]{1, 3};
-        int[] expectedAQA = new int[]{0, 3};
-        Assert.assertArrayEquals(expectedJava, studentJava.getHowMuchTimeIsLeft());
-        Assert.assertArrayEquals(expectedAQA, studentAQA.getHowMuchTimeIsLeft());
+    public void testHoursLeft() {
+        Duration expectedJava = Duration.ofHours(27);
+        Duration expectedAQA = Duration.ofHours(-3);
+        Assert.assertEquals(expectedJava, studentJava.getHoursLeft());
+        Assert.assertEquals(expectedAQA, studentAQA.getHoursLeft());
     }
 
     @Test
     public void testPrintResult() {
-        String studentNameJava = "Ivanov Ivan";
-        int parameterOne = 1;
-        String studentNameAQA = "Sidorov Ivan";
-        int parameterZero = 0;
-        Assert.assertTrue(Input.resultString(studentNameJava,parameterOne,studentJava,studentAQA).startsWith("Long report: "));
-        Assert.assertTrue(Input.resultString(studentNameAQA, parameterZero,studentJava,studentAQA).contains("Short report: "));
+        Assert.assertTrue(InputAndOutput.resultString(1,studentJava).startsWith("Long report: "));
+        Assert.assertTrue(InputAndOutput.resultString(0,studentAQA).contains("Short report: "));
     }
 
     @Test
-    public void testWrongStudentName() {
-        String studentName = "Wrong Name";
-        int parameter = 1;
-        Assert.assertTrue(Input.resultString(studentName, parameter,studentJava,studentAQA).contains("Error"));
+    public void testIsFinished(){
+        Assert.assertFalse(new TimeCalculation().isFinished(testDate,studentJava.getEndDate()));
+        Assert.assertTrue(new TimeCalculation().isFinished(testDate,studentAQA.getEndDate()));
     }
 }
 
