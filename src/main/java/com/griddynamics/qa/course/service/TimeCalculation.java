@@ -1,16 +1,28 @@
 package com.griddynamics.qa.course.service;
 
+import com.griddynamics.qa.course.RepresentTime;
+import com.griddynamics.qa.course.model.Course;
+import com.griddynamics.qa.course.model.Student;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static java.time.DayOfWeek.SATURDAY;
 import static java.time.DayOfWeek.SUNDAY;
 
 public class TimeCalculation {
 
-    public LocalDateTime calculateEndDate(LocalDateTime startDate, Duration duration) {
-        LocalDateTime temporaryDate = startDate;
-        int numOfDays = (int) Math.ceil(duration.toHours() / 8.0);
+    protected Duration calculateDuration(Student student) {
+        List<Course> course = student.getCourse();
+        return course.get(0).getDuration().plus(
+                course.get(1).getDuration()).plus(course.get(2).getDuration());
+    }
+
+    public LocalDateTime calculateEndDate(Student student) {
+        LocalDateTime temporaryDate = student.getStartDate();
+        Duration duration = calculateDuration(student);
+        long numOfDays = (long) Math.ceil(duration.toHours() / 8.0);
         for (int i = 0; i < numOfDays; i++) {
             if (temporaryDate.getDayOfWeek() == SUNDAY
                     || temporaryDate.getDayOfWeek() == SATURDAY) {
@@ -18,7 +30,7 @@ public class TimeCalculation {
             }
             temporaryDate = temporaryDate.plusDays(1);
         }
-        LocalDateTime endDate = startDate.plusDays(numOfDays - 1);
+        LocalDateTime endDate = student.getStartDate().plusDays(numOfDays - 1);
         long timeLeft = duration.toHours() % 8;
         if (timeLeft == 0) {
             endDate = endDate.plusHours(8);
@@ -26,11 +38,11 @@ public class TimeCalculation {
         return endDate;
     }
 
-    public Duration calculateHoursLeft(LocalDateTime presentDate, LocalDateTime endDate) {
-        return Duration.between(presentDate,endDate);
+    public Duration calculateHoursLeft(Student student) {
+        return Duration.between(RepresentTime.presentDate, calculateEndDate(student));
     }
 
-    public boolean isFinished(LocalDateTime presentDate, LocalDateTime endDate) {
-        return presentDate.isAfter(endDate);
+    public boolean isFinished(Student student) {
+        return RepresentTime.presentDate.isAfter(calculateEndDate(student));
     }
 }

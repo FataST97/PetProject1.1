@@ -1,7 +1,7 @@
 package com.griddynamics.qa.course;
 
-import com.griddynamics.qa.course.io.InputAndOutput;
-import com.griddynamics.qa.course.model.AQAStudent;
+import com.griddynamics.qa.course.io.Io;
+import com.griddynamics.qa.course.model.J2EEStudent;
 import com.griddynamics.qa.course.model.JavaStudent;
 import com.griddynamics.qa.course.model.Student;
 
@@ -13,12 +13,12 @@ public class Main {
 
     public static void main(String[] args) {
         List<Student> students = Arrays.asList(
-                new AQAStudent("Sidorov Ivan", LocalDateTime.of(2020, 6, 1, 10, 0)),
+                new J2EEStudent("Sidorov Ivan", LocalDateTime.of(2020, 6, 1, 10, 0)),
                 new JavaStudent("Ivanov Ivan", LocalDateTime.of(2020, 6, 1, 10, 0)));
 
-        int parameter = InputAndOutput.readParameter();
+        int parameter = Io.readParameter();
         for (Student student : students) {
-            InputAndOutput.showResultString(parameter, student);
+            Io.printResult(parameter, student);
         }
     }
 }
