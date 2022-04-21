@@ -13,16 +13,16 @@ public class TimeCalculation {
         int numOfDays = (int) Math.ceil(duration.toHours() / 8.0);
         for (int i = 0; i < numOfDays; i++) {
             if (temporaryDate.getDayOfWeek() == SUNDAY
-                    | temporaryDate.getDayOfWeek() == SATURDAY) {
+                    || temporaryDate.getDayOfWeek() == SATURDAY) {
                 numOfDays++;
             }
             temporaryDate = temporaryDate.plusDays(1);
         }
         LocalDateTime endDate = startDate.plusDays(numOfDays - 1);
-        long howMuchHoursIsLeft = duration.toHours() % 8;
-        if (howMuchHoursIsLeft == 0) {
+        long timeLeft = duration.toHours() % 8;
+        if (timeLeft == 0) {
             endDate = endDate.plusHours(8);
-        } else endDate = endDate.plusHours(howMuchHoursIsLeft);
+        } else endDate = endDate.plusHours(timeLeft);
         return endDate;
     }
 

@@ -8,14 +8,14 @@ import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class InputAndOutput {
-    protected String createShortOutput(Student student) {
+    private String createShortOutput(Student student) {
         return "Short report: "+ student.getName() + " (" + student.getCurriculumName() + ")-" +
-                createIsFinishedText(student.getHoursLeft(),
+                createFinishedText(student.getHoursLeft(),
                         student.getTimeCalculation().isFinished(student.getPresentDate(),
                                 student.getEndDate()));
     }
 
-    protected String createIsFinishedText(Duration timeLeft, boolean isFinished) {
+    private String createFinishedText(Duration timeLeft, boolean isFinished) {
         if (isFinished && timeLeft.toDays() == 0)
             return "Training completed. " + Math.abs(timeLeft.toHours()) + " hours have passed since the end";
         else if (isFinished)
@@ -26,7 +26,7 @@ public class InputAndOutput {
             return "Training is not finished. " + Math.abs(timeLeft.toDays()) + " d " + Math.abs(timeLeft.toHours()-24) + " hours are left until the end";
     }
 
-    protected String createLongReport(Student student) {
+    private String createLongReport(Student student) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd MMMM yyyy h:mm a");
         return "Long report: "+
                 "\nStudent name - " + student.getName() +
@@ -36,7 +36,7 @@ public class InputAndOutput {
                 "\nCourses: " + student.getCourseHoursText() +
                 "\nStart date " + dtf.format(student.getStartDate()) +
                 "\nEnd date " + dtf.format(student.getEndDate()) +
-                "\n" + createIsFinishedText(student.getHoursLeft(),
+                "\n" + createFinishedText(student.getHoursLeft(),
                 student.getTimeCalculation().isFinished(LocalDateTime.of(2020, 6, 8, 15, 0),
                         student.getEndDate()));
     }
@@ -54,12 +54,12 @@ public class InputAndOutput {
         return parameter;
     }
 
-    public static String resultString(int parameter, Student student) {
+    public static void showResultString(int parameter, Student student) {
         InputAndOutput inputAndOutput = new InputAndOutput();
-        return switch (parameter) {
-            case 0 -> inputAndOutput.createShortOutput(student);
-            case 1 -> inputAndOutput.createLongReport(student);
-            default -> "Error, Missed parameter";
-        };
+        switch (parameter) {
+            case 0 -> System.out.println(inputAndOutput.createShortOutput(student)+"\n");
+            case 1 -> System.out.println(inputAndOutput.createLongReport(student)+"\n");
+            default -> System.out.println("Error, Missed parameter");
+        }
     }
 }
