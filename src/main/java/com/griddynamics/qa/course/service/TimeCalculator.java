@@ -1,6 +1,5 @@
 package com.griddynamics.qa.course.service;
 
-import com.griddynamics.qa.course.RepresentTime;
 import com.griddynamics.qa.course.model.Course;
 import com.griddynamics.qa.course.model.Student;
 
@@ -12,6 +11,8 @@ import static java.time.DayOfWeek.SATURDAY;
 import static java.time.DayOfWeek.SUNDAY;
 
 public class TimeCalculation {
+
+    private static final LocalDateTime PRESENT_DATE = LocalDateTime.of(2020, 6, 8, 15, 0);
 
     protected Duration calculateDuration(Student student) {
         List<Course> course = student.getCourse();
@@ -39,10 +40,10 @@ public class TimeCalculation {
     }
 
     public Duration calculateHoursLeft(Student student) {
-        return Duration.between(RepresentTime.presentDate, calculateEndDate(student));
+        return Duration.between(PRESENT_DATE, calculateEndDate(student));
     }
 
     public boolean isFinished(Student student) {
-        return RepresentTime.presentDate.isAfter(calculateEndDate(student));
+        return PRESENT_DATE.isAfter(calculateEndDate(student));
     }
 }
