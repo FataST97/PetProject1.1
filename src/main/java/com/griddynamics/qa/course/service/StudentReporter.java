@@ -1,21 +1,21 @@
 package com.griddynamics.qa.course.service;
 
-import com.griddynamics.qa.course.model.Course;
 import com.griddynamics.qa.course.model.Student;
+import lombok.RequiredArgsConstructor;
 
 import java.time.Duration;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
+import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 public class StudentReporter {
 
-    TimeCalculation calculator = new TimeCalculation();
+    private final TimeCalculator calculator;
 
     private String createCourseInfo(Student student) {
-        List<Course> course = student.getCourse();
-        return "\n" + course.get(0).getCourseName() + " " + course.get(0).getDuration().toHours() + " hours" +
-                "\n" + course.get(1).getCourseName() + " " + course.get(1).getDuration().toHours() + " hours" +
-                "\n" + course.get(2).getCourseName() + " " + course.get(2).getDuration().toHours() + " hours.";
+        return student.getCourse().stream()
+                .map(course -> "\n" + course.getCourseName() + " " + course.getDuration().toHours() + " hours")
+                .collect(Collectors.joining());
     }
 
     private String createFinishedText(Duration timeLeft, boolean isFinished) {

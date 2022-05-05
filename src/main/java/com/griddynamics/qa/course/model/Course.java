@@ -1,9 +1,12 @@
 package com.griddynamics.qa.course.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.Duration;
 
+@Getter
+@AllArgsConstructor
 public enum Course {
 
     JAVA("Java", Duration.ofHours(16)),
@@ -13,13 +16,7 @@ public enum Course {
     PAGE_OBJECT("Page Object", Duration.ofHours(16)),
     SELENIUM("Selenium", Duration.ofHours(16));
 
-    @Getter
-    private final Duration duration;
-    @Getter
     private final String courseName;
+    private final Duration duration;
 
-    Course(String courseName, Duration duration) {
-        this.duration = duration;
-        this.courseName = courseName;
-    }
 }

@@ -10,17 +10,18 @@ import java.util.List;
 import static java.time.DayOfWeek.SATURDAY;
 import static java.time.DayOfWeek.SUNDAY;
 
-public class TimeCalculation {
+public class TimeCalculator {
 
     private static final LocalDateTime PRESENT_DATE = LocalDateTime.of(2020, 6, 8, 15, 0);
 
     protected Duration calculateDuration(Student student) {
-        List<Course> course = student.getCourse();
-        return course.get(0).getDuration().plus(
-                course.get(1).getDuration()).plus(course.get(2).getDuration());
+         return student.getCourse().stream().map(Course::getDuration).reduce(Duration.ZERO, Duration::plus);
     }
 
     public LocalDateTime calculateEndDate(Student student) {
+        if (student.getStartDate().isAfter(PRESENT_DATE)) {
+            throw new IllegalArgumentException("Wrong start date");
+        }
         LocalDateTime temporaryDate = student.getStartDate();
         Duration duration = calculateDuration(student);
         long numOfDays = (long) Math.ceil(duration.toHours() / 8.0);

@@ -7,6 +7,7 @@ import java.util.List;
 import static com.griddynamics.qa.course.model.Course.*;
 
 public class J2EEStudent extends Student {
+
     private static final String CURRICULUM_NAME = "J2EE Developer";
     private static final List<Course> AQA_COURSES = Arrays.asList(TEST_DESIGN, SELENIUM, PAGE_OBJECT);
 
